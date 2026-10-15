@@ -156,4 +156,4 @@ The version lives in the `SKILL.md` frontmatter (currently `0.3.0`). History is 
 
 ## License
 
-MIT © 2026 Shubham Kumar — see [`LICENSE`](LICENSE).
+MIT © 2026 [shubham-dg10](https://github.com/shubham-dg10) — see [`LICENSE`](LICENSE).

@@ -2,7 +2,7 @@
 name: ready-to-ship-audit-agent-skill
 description: "Judge DG10 launch safety with evidence and remedies."
 version: 0.3.0
-author: Shubham Kumar (shubham-dg10), Hermes Agent
+author: shubham-dg10 (https://github.com/shubham-dg10), Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
