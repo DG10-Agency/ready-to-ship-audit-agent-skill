@@ -1,0 +1,21 @@
+name: validate
+
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Assert SKILL.md frontmatter
+        run: |
+          python -c "import re,sys; t=open('SKILL.md').read(); m=re.search(r'^---\n(.*?)\n---', t, re.S); assert m, 'missing frontmatter'; f=m.group(1); assert 'name: ready-to-ship-audit-agent-skill' in f, 'skill name mismatch'; assert 'version: 0.3.0' in f, 'version mismatch'; print('frontmatter OK')"
+      - name: Run gate_check
+        run: python scripts/gate_check.py --help 2>/dev/null || python scripts/gate_check.py
+      - name: Run unit tests
+        run: python -m unittest discover -s scripts -v
