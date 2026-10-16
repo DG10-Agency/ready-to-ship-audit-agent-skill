@@ -1,7 +1,7 @@
 ---
 name: ready-to-ship-audit-agent-skill
 description: "Judge DG10 launch safety with evidence and remedies."
-version: 0.6.0
+version: 0.7.0
 author: shubham-dg10 (https://github.com/shubham-dg10), Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -44,7 +44,7 @@ Load production-readiness-audit §1-2 and deployment-readiness §Scope. Map lang
 
 ### 2. Coverage ledger (checklist, not proof)
 
-Reference the ReleaseGuard catalog (`catalogs/production-checks.json`, path configured per machine — never vendored in). One row per applicable check, init NOT ASSESSED. Map companion evidence to check IDs with provenance. Never convert missing capability to PASS. If the catalog path is unavailable, ledger=G1-G12 only with an explicit omission note. Done when: every applicable check has status + evidence pointer, or NOT ASSESSED + reason.
+Reference the ReleaseGuard catalog (`catalogs/production-checks.json`, path configured per machine — never vendored in). One row per applicable check, init NOT ASSESSED. Map companion evidence to check IDs with provenance. Never convert missing capability to PASS. If the catalog path is unavailable, ledger=G1-G13 only with an explicit omission note. Done when: every applicable check has status + evidence pointer, or NOT ASSESSED + reason.
 
 ### 3. DG10 gap sweep (only what siblings + catalog miss)
 

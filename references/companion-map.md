@@ -7,7 +7,7 @@ build-only-for-gap → NOT ASSESSED). Zero copied check text below.
 | Aspect | Prefer | DG10-owned gap | Evidence gate |
 |---|---|---|---|
 | App security / DAST | Cloudflare security skill; OWASP ASVS + ZAP on authorized staging | DG10 gates G2/G3 (SQL/auth) as pre-screen | Companion report + mapped check IDs, or NOT ASSESSED |
-| Breadth / second opinion | Viaknox | DG10 stack gates G1–G12 it doesn't cover | Its findings mapped to ledger; gaps stay ours |
+| Breadth / second opinion | Viaknox | DG10 stack gates G1–G13 it doesn't cover | Its findings mapped to ledger; gaps stay ours |
 | Mobile security | OWASP MASVS-MASTG; MobSF | EAS flag gate G6; stale-bundle G7 | Static + device/dynamic output, or NOT ASSESSED |
 | Dependency vulns | OSV + GHSA + CISA KEV | Exact version + lockfile + reachability call | Advisory range + fix release confirmed; no single feed = clean |
 | Supply chain / provenance | OpenSSF Scorecard; Syft/CycloneDX SBOM | CI-permissions + artifact-hash binding (G11) | Hashes + attestation on shipped artifact |
