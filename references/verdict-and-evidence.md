@@ -34,3 +34,7 @@ READY / READY WITH WARNINGS → `kanban_request_review`, warnings
 attached as required changes. No silent absorption.
 Redact secrets in all evidence (hash or artifact ID, never values).
 `scripts/gate_check.py` checks ledger shape only, never truth — a GATE PASS is not evidence a gate actually ran. Floor rule: any High-severity NOT ASSESSED forbids READY; zero FAILs + open High unassessed floors at READY WITH WARNINGS.
+
+Readiness bands: BLOCKED = any P0 open (ship-killer, must close now); READY WITH WARNINGS = zero P0 + open P1 (ship with owner sign-off, P1 closes within 30 days); READY = zero P0/P1 + open P2 only (P2 hardens within 90 days, tracked in Sustain/blind-spots).
+
+Re-score rule: re-run every release + quarterly; report carries a re-score date; trend (band movement + gap aging) beats absolute score — cite prior band + date when re-scoring.

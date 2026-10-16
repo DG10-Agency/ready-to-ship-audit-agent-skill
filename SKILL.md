@@ -1,7 +1,7 @@
 ---
 name: ready-to-ship-audit-agent-skill
 description: "Judge DG10 launch safety with evidence and remedies."
-version: 0.7.0
+version: 0.8.0
 author: shubham-dg10 (https://github.com/shubham-dg10), Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -19,11 +19,13 @@ One gate for any DG10 app. Ends with gaps + fix plan, always.
 
 - User asks: ready to ship, go-live, launch safety, pre-release audit, or "what is left".
 - Release-sensitive work just finished and someone must answer: safe to ship right now?
-- Don't use for: per-commit code review (use requesting-code-review), single-bug root cause (use systematic-debugging), pure deploy-config diff (use deployment-readiness alone).
+- Don't use for: per-commit code review, single-bug root cause, pure deploy-config diff.
+- Coexistence: when breadth-scan skills are also installed, they own the breadth scan and this skill owns the verdict + fix-plan finish.
+- Run breadth first, then this skill; the anti-triggers above still apply.
 
 ## Reuse before create
 
-Search repo + skills + MemPalace for prior art before writing new checks or scripts. Extend production-readiness-audit / deployment-readiness. Reference the ReleaseGuard catalog by configured path; never copy its files in.
+Search repo + skills + MemPalace for prior art before writing new checks or scripts. Extend installed breadth-scan coverage where present. Reference the ReleaseGuard catalog by configured path; never copy its files in.
 
 ## Boundaries
 
@@ -38,13 +40,13 @@ This skill reports; it does not change. No config edits, commits, tags, pushes, 
 3. `read_file` every `.github/workflows/*.yml`; note trigger branches and what actually deploys from this branch.
 4. Record commit SHA + artifact digest. Branch name alone is not identity. For nested repos record inner SHA; libraries with no artifact record no-artifact instead of a digest. Done when: SHA + channel + owner on page.
 
-### 1. Profile + route (reuse)
+### 1. Profile + route (self-contained)
 
-Load production-readiness-audit §1-2 and deployment-readiness §Scope. Map languages, platforms, and layers with `search_files`. Route tracks A-E per the ReleaseGuard skill-map: same base commit, non-overlapping files, max 7 subagents. If a sibling skill is absent, proceed without it and record the gap under NOT VERIFIED. Done when: track assignments + file ownership table written.
+Run `references/core-procedure.md` passes 1-3 in order. Map languages, platforms, and layers with `search_files`. Route tracks A-E per the ReleaseGuard skill-map: same base commit, non-overlapping files, max 7 subagents. If the catalog or a breadth companion is absent, proceed without it and record the gap under NOT VERIFIED. Done when: track assignments + file ownership table written.
 
 ### 2. Coverage ledger (checklist, not proof)
 
-Reference the ReleaseGuard catalog (`catalogs/production-checks.json`, path configured per machine — never vendored in). One row per applicable check, init NOT ASSESSED. Map companion evidence to check IDs with provenance. Never convert missing capability to PASS. If the catalog path is unavailable, ledger=G1-G13 only with an explicit omission note. Done when: every applicable check has status + evidence pointer, or NOT ASSESSED + reason.
+Reference the ReleaseGuard catalog (`catalogs/production-checks.json`, path configured per machine — never vendored in). One row per applicable check, init NOT ASSESSED. Map companion evidence to check IDs with provenance. Never convert missing capability to PASS. If the catalog path is unavailable, ledger=G1-G15 only with an explicit omission note. Done when: every applicable check has status + evidence pointer, or NOT ASSESSED + reason.
 
 ### 3. DG10 gap sweep (only what siblings + catalog miss)
 

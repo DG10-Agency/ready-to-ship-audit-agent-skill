@@ -1,4 +1,4 @@
-# DG10 stack gates (G1–G13)
+# DG10 stack gates (G1–G15)
 
 Only what `production-readiness-audit`, `deployment-readiness`, and the
 ReleaseGuard catalog miss. Tables only — procedure lives in SKILL.md.
@@ -19,9 +19,12 @@ Each gate ends PASS / FAIL / NOT ASSESSED / NOT APPLICABLE (N/A) with file:line 
 | G11 | Contabo via CI only | `terminal`: `gh run list` deploy workflow green for this SHA; `git status` on server shows no manual edits; `systemctl --user list-units` shows supervised unit, not bare proc | green CI + zero manual edits + supervised unit; no remote => gh lookup impossible, record distinctly from no-CI; fix = register remote + canonical workflow + first green run; record workflow `on:` triggers as first-class evidence; dispatch-only deploys are a distinct state from green-CI — never imply auto-deploy |
 | G12 | WP Plugin Check | applicability test `contains plugin header?`: non-plugin => N/A; `terminal`: run `Plugin Check via Docker` per wp-plugin-testing-lab before submission | report attached to release evidence, zero errors |
 | G13 | Desktop packaging (Tauri/Electron) | signing identity + signature verification, updater channel + signed updates, sidecar/externalBin provenance + SBOM, capability least-privilege, IPC input validation | unsigned/no-updater = FAIL for desktop ships; NOT ASSESSED only when no desktop target exists |
+| G14 | Observability/SLO/cost/PII/registry (four sub-checks) | SLO: availability + p95 latency targets recorded + burn-rate alert rule present (`search_files(pattern="burn.?rate\|error_budget\|slo", path="<repo>")`); cost: per-run ceiling recorded + overrun action (`search_files(pattern="max_cost\|cost_cap\|cost_ceiling", path="<repo>")`); PII: redaction at emit, not at store (`search_files(pattern="redact\|pii", path="<emit-paths>")`); registry: prompt + tool versions pinned (`search_files(pattern="prompt_version\|tool_version\|model_version", path="<repo>")`); each sub-check N/A-able by architecture with reason (no LLM surface => cost/PII/registry N/A; no SLO target => NOT ASSESSED, never N/A) | all applicable sub-checks present with file:line or command output; any applicable sub-check missing = FAIL |
+| G15 | Generic web/API hygiene (three sub-checks) | rate-limit: throttle/ratelimit on mutating routes (`search_files(pattern="rate.?limit\|throttl", path="<routes-dir>")`); licenses: dependency allowlist, no GPL in prod bundle (`terminal`: `npx license-checker --production --summary` or `pip-licenses`, grep for GPL/AGPL); a11y/SEO: axe pass on key pages + meta/OG tags present (`terminal`: `npx axe <url>` exit 0; `search_files(pattern="og:title\|description", path="<head>")`); each sub-check one grep/command, N/A-able with reason (no mutating routes / no web surface) | all applicable sub-checks pass with command output or file:line; any applicable miss = FAIL |
 
 Rules: unknown is NOT ASSESSED, never PASS. Any gate that cannot run
 (no SSH, no staging, no Docker) is NOT ASSESSED with reason + consequence.
+Denominator: G1–G15 applicable only (N/A excluded, counted separately).
 Pitfall: nested `workflows/` dir = CI-undiscoverable = auto-NOT ASSESSED G11.
 Trap: `npm audit --offline` / cached advisory output is NOT evidence; live networked scan required.
 Neutral: missing middleware.ts is neutral when per-handler enforcement is complete with table; gap only if a handler lacks proof.

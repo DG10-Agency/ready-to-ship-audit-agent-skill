@@ -121,6 +121,7 @@ No. Read-only reporting; shipping actions need explicit approval.
 ## Install
 
 ```bash
+npx skills add DG10-Agency/ready-to-ship-audit-agent-skill
 git clone <this-repo-url> ready-to-ship-audit-agent-skill
 ```
 
@@ -152,7 +153,7 @@ Last verified against the snapshot this scaffold was built from; re-verify `last
 
 ## Versioning
 
-The version lives in the `SKILL.md` frontmatter (currently `0.7.0`). History is tracked through git tags and GitHub Releases — `git tag v0.7.0 && git push origin v0.7.0`.
+The version lives in the `SKILL.md` frontmatter (currently `0.8.0`). History is tracked through git tags and GitHub Releases — `git tag v0.8.0 && git push origin v0.8.0`.
 
 ## License
 

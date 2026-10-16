@@ -4,6 +4,7 @@
 > Verdict used once; put ReleaseGuard equiv in parentheses on the VERDICT line.
 
 VERDICT: <BLOCKED | READY WITH WARNINGS | READY> (<BLOCK | SHIP WITH ACCEPTED RISK | SHIP>)
+RE-SCORE DATE: <YYYY-MM-DD — next re-run due: next release or quarterly, whichever first>
 
 ## Why (3 lines max)
 
@@ -12,6 +13,7 @@ VERDICT: <BLOCKED | READY WITH WARNINGS | READY> (<BLOCK | SHIP WITH ACCEPTED RI
 3. <third reason, or owner decision needed>
 
 ## Gap table (every FAIL + NOT ASSESSED — zero orphan rows)
+<!-- maturity band per Fix: now (P0) / 30-day (P1) / 90-day (P2) — put band in fix task ref, e.g. <Fix 2, 30-day> -->
 
 | check | severity | evidence (file:line or cmd) | impact | fix task |
 |---|---|---|---|---|
