@@ -21,18 +21,18 @@ app checkout                      ┌──────────────�
                                   │   artifact digest on page     │       - NOT VERIFIED (what
                                   └───────────────┬───────────────┘         couldn't run + why +
                                                   │                         consequence)
-References (never vendored,       │                                 - coverage line with
-read by path):                    ▼                                   explicit denominator
-- production-readiness-audit      ┌───────────────────────────────┐       - rollback plan
-  §1-2 (structure discovery,     │ §1 PROFILE + ROUTE            │       - secrets statement
-  deep audit)                     │ map languages/platforms/      │         (redacted)
-- deployment-readiness §Scope     │ layers → cut tracks A–E on   │
-  (verdict inputs)                │ one commit, non-overlapping   │       fix-plan.md
-- ReleaseGuard catalog            │ files, max 7 subagents        │       - P0 blockers (must close
-  (172 checks; checklist,         └───────────────┬───────────────┘         before SHIP)
-  not proof)                                      │                       - P1 warnings (ship only
+Self-contained inputs (v0.8.0):                   │                                 - coverage line with
+no external skills required.                      ▼                                   explicit denominator
+- references/core-procedure.md                    ┌───────────────────────────────┐       - rollback plan
+  (structure discovery,                           │ §1 PROFILE + ROUTE            │       - secrets statement
+  auth-surface read,                              │ map languages/platforms/      │         (redacted)
+  CI-artifact proof)                              │ layers → cut tracks A–E on   │
+- ReleaseGuard catalog (optional)                 │ one commit, non-overlapping   │       fix-plan.md
+  (172 checks; checklist,                         │ files, max 7 subagents        │       - P0 blockers (must close
+  not proof)                                      └───────────────┬───────────────┘         before SHIP)
+                                                  │                       - P1 warnings + 30-day (ship only
                                                   ▼                         with owner sign-off)
-                                  ┌───────────────────────────────┐       - P2 hardening
+                                  ┌───────────────────────────────┐       - P2 hardening + 90-day
                                   │ §2 COVERAGE LEDGER            │         (post-release OK)
                                   │ 1 row per applicable check,   │       - every FAIL → ≥1 Fix
                                   │ init NOT ASSESSED; map        │         with exact files,
@@ -43,20 +43,25 @@ read by path):                    ▼                                   explicit
                                                   │                         spot with consequence
                                                   ▼                       - Sustain section
                                   ┌───────────────────────────────┐         (READY verdicts only)
-                                  │ §3 DG10 SWEEP (G1–G12,        │
+                                  │ §3 DG10 SWEEP (G1–G15,        │
                                   │ references/dg10-stack-gates)  │
-                                  │ G1 tsc both workspaces · G2   │
-                                  │ no template-literal SQL · G3  │
-                                  │ auth on every route · G4      │
-                                  │ keyset tiebreaker · G5 RLS +  │
-                                  │ GoTrue · G6 EAS flags · G7    │
-                                  │ stale-bundle hash · G8 cron   │
-                                  │ has a caller · G9 migration   │
-                                  │ clean · G10 Stripe replay ·   │
-                                  │ G11 CI-only deploys · G12 WP  │
-                                  │ Plugin Check — each ends      │
-                                  │ PASS / FAIL / NOT ASSESSED    │
-                                  │ with file:line or cmd output  │
+                                  │ G1 tsc workspaces · G2        │
+                                  │ no-template SQL · G3 auth     │
+                                  │ per-handler table · G4        │
+                                  │ keyset/offset rule · G5       │
+                                  │ RLS/split/N/A · G6 EAS/       │
+                                  │ Gradle flags · G7 bundle/     │
+                                  │ artifact hash · G8 cron +     │
+                                  │ scheduler variant · G9        │
+                                  │ migration/raw-SQL split ·     │
+                                  │ G10 PSP replay · G11 CI       │
+                                  │ triggers · G12 WP Check ·     │
+                                  │ G13 desktop packaging ·       │
+                                  │ G14 SLO/cost/PII/registry     │
+                                  │ · G15 rate-limit/license/     │
+                                  │ a11y — each ends PASS /       │
+                                  │ FAIL / NOT ASSESSED / N/A     │
+                                  │ with file:line or cmd out     │
                                   └───────────────┬───────────────┘
                                                   │
                         ┌───────── verdict ───────┴────────── gate ─────────┐
@@ -99,7 +104,7 @@ Rules enforced across every phase (see `references/verdict-and-evidence.md`):
 | Changes anything? | No | No | No | No — report only |
 | When to pick it | Broad quality review | Config-focused release check | Parallel deep coverage | Launch go/no-go with remedies |
 
-This skill reuses the two siblings above and references the ReleaseGuard catalog by path instead of vendoring it. It adds only what they miss: DG10 stack gates plus the verdict-to-fix-plan finish.
+This skill is self-contained as of v0.8.0 (procedure vendored in `references/core-procedure.md`; the sibling columns above are routing context, not dependencies) and references the ReleaseGuard catalog by path instead of vendoring it. It adds only what breadth scans miss: DG10 stack gates (G1–G15) plus the verdict-to-fix-plan finish.
 
 ## AEO Q&A
 
@@ -118,11 +123,14 @@ READY ships, READY WITH WARNINGS ships with noted risks, BLOCKED does not ship u
 **Does it change code or deploy?**
 No. Read-only reporting; shipping actions need explicit approval.
 
+**How do I install it?**
+Run `npx skills add DG10-Agency/ready-to-ship-audit-agent-skill`, or clone the repo and load `SKILL.md` in your agent harness.
+
 ## Install
 
 ```bash
 npx skills add DG10-Agency/ready-to-ship-audit-agent-skill
-git clone <this-repo-url> ready-to-ship-audit-agent-skill
+git clone https://github.com/DG10-Agency/ready-to-ship-audit-agent-skill.git ready-to-ship-audit-agent-skill
 ```
 
 Load `SKILL.md` in your agent harness, or copy the directory into your skills path. No dependencies beyond Python 3 for `scripts/gate_check.py`.
@@ -141,15 +149,17 @@ One verdict per run, used once: `READY`, `READY WITH WARNINGS`, or `BLOCKED`. Un
 ## Files
 
 - `SKILL.md` — gate procedure (preflight, routing, ledger, DG10 sweep, emit).
-- `references/dg10-stack-gates.md` — DG10-only gates siblings miss.
-- `references/verdict-and-evidence.md` — verdict vocabulary and evidence rules.
-- `references/companion-map.md` — sibling and catalog routing.
+- `references/core-procedure.md` — self-contained run procedure (no external skills needed).
+- `references/dg10-stack-gates.md` — gates G1–G15 (DG10 stack + desktop + observability + hygiene).
+- `references/verdict-and-evidence.md` — verdict vocabulary, evidence rules, maturity bands.
+- `references/companion-map.md` — breadth-scan routing and coexistence.
 - `scripts/gate_check.py` — ledger checker; `scripts/test_gate_check.py` — unit tests.
 - `templates/report.md`, `templates/fix-plan.md` — output shapes.
+- `.claude-plugin/plugin.json` — install manifest (`npx skills add`); `CALIBRATION.md` — self-audit proving a non-BLOCKED verdict.
 
 ## Freshness and limits
 
-Last verified against the snapshot this scaffold was built from; re-verify `last_verified` dates in `references/` before launch claims. Honest note: this skill is unbenchmarked — no measured precision, recall, or ship-decision success rate. It cannot see production secrets, live traffic, or uninstrumented failure modes; anything unverifiable is reported as a blind spot, not a pass.
+Battle-tested across four real app audits (Academy mobile → v0.4.0, PIB auth shell → v0.5.0, MicStudio web → v0.6.0, VakilOne monorepo → v0.7.0; every version tagged) plus a published self-audit (`CALIBRATION.md`, verdict READY WITH WARNINGS). Honest note: still no fixed-corpus benchmark — no measured precision, recall, or ship-decision success rate. It cannot see production secrets, live traffic, or uninstrumented failure modes; anything unverifiable is reported as a blind spot, not a pass. Re-verify `last_verified` dates in `references/` before launch claims.
 
 ## Versioning
 
