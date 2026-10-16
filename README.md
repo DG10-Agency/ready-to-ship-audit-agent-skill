@@ -126,6 +126,19 @@ No. Read-only reporting; shipping actions need explicit approval.
 **How do I install it?**
 Run `npx skills add DG10-Agency/ready-to-ship-audit-agent-skill`, or clone the repo and load `SKILL.md` in your agent harness.
 
+## Executing fix-plans at scale
+
+This skill audits and plans; for **executing** a fix-plan across dozens or
+thousands of items (files, records, URLs) without losing progress on weak
+models or long runs, use the separate-but-linked
+**agentic-batch-loop-engine** — checkpointed resume, retries, timeouts,
+and per-item evidence logs:
+
+- Engine repo: <https://github.com/DG10-Agency/Agentic-Batch-Loop-Engine-by-DG10.Agency>
+- Install: `npx skills add DG10-Agency/Agentic-Batch-Loop-Engine-by-DG10.Agency`
+- Typical flow: this skill emits `fix-plan.md` → feed each finding as a batch
+  item into the engine → verify with `scripts/gate_check.py` → ship.
+
 ## Install
 
 ```bash
