@@ -152,7 +152,7 @@ Last verified against the snapshot this scaffold was built from; re-verify `last
 
 ## Versioning
 
-The version lives in the `SKILL.md` frontmatter (currently `0.5.0`). History is tracked through git tags and GitHub Releases — `git tag v0.5.0 && git push origin v0.5.0`.
+The version lives in the `SKILL.md` frontmatter (currently `0.6.0`). History is tracked through git tags and GitHub Releases — `git tag v0.6.0 && git push origin v0.6.0`.
 
 ## License
 
