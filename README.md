@@ -21,7 +21,7 @@ app checkout                      ┌──────────────�
                                   │   artifact digest on page     │       - NOT VERIFIED (what
                                   └───────────────┬───────────────┘         couldn't run + why +
                                                   │                         consequence)
-Self-contained inputs (v0.8.0):                   │                                 - coverage line with
+Self-contained inputs (v0.8.1):                   │                                 - coverage line with
 no external skills required.                      ▼                                   explicit denominator
 - references/core-procedure.md                    ┌───────────────────────────────┐       - rollback plan
   (structure discovery,                           │ §1 PROFILE + ROUTE            │       - secrets statement
@@ -104,7 +104,7 @@ Rules enforced across every phase (see `references/verdict-and-evidence.md`):
 | Changes anything? | No | No | No | No — report only |
 | When to pick it | Broad quality review | Config-focused release check | Parallel deep coverage | Launch go/no-go with remedies |
 
-This skill is self-contained as of v0.8.0 (procedure vendored in `references/core-procedure.md`; the sibling columns above are routing context, not dependencies) and references the ReleaseGuard catalog by path instead of vendoring it. It adds only what breadth scans miss: DG10 stack gates (G1–G15) plus the verdict-to-fix-plan finish.
+This skill is self-contained as of v0.8.1 (procedure vendored in `references/core-procedure.md`; the sibling columns above are routing context, not dependencies) and references the ReleaseGuard catalog by path instead of vendoring it. It adds only what breadth scans miss: DG10 stack gates (G1–G15) plus the verdict-to-fix-plan finish.
 
 ## AEO Q&A
 
@@ -176,7 +176,7 @@ Battle-tested across four real app audits (Academy mobile → v0.4.0, PIB auth s
 
 ## Versioning
 
-The version lives in the `SKILL.md` frontmatter (currently `0.8.0`). History is tracked through git tags and GitHub Releases — `git tag v0.8.0 && git push origin v0.8.0`.
+The version lives in the `SKILL.md` frontmatter (currently `0.8.1`). History is tracked through git tags and GitHub Releases — `git tag v0.8.1 && git push origin v0.8.1`.
 
 ## License
 

@@ -1,6 +1,6 @@
-# CALIBRATION.md — self-audit of THIS repo (v0.8.0 gates)
+# CALIBRATION.md — self-audit of THIS repo (v0.8.1 gates)
 
-Scope: agent-skill repo (SKILL.md + references/ + stdlib-only `scripts/` + `templates/` + validate-only CI). No app backend, no DB, no deploy target. Gates read from `references/dg10-stack-gates.md` (v0.8.0).
+Scope: agent-skill repo (SKILL.md + references/ + stdlib-only `scripts/` + `templates/` + validate-only CI). No app backend, no DB, no deploy target. Gates read from `references/dg10-stack-gates.md` (v0.8.1).
 Method: `python3 scripts/gate_check.py .` → `GATE PASS (3 files, 0 fails mapped)` exit 0; `python -m unittest discover -s scripts` → 6 tests OK; `gh run list` → 5 recent `validate` runs green (e.g. run 38860614780, success, 2026-10-16); secret grep (`sk_live|ghp_|AKIA|api[_-]?key\s*=|password\s*=`) → zero hits.
 
 | Gate | Verdict | Evidence (one line) |

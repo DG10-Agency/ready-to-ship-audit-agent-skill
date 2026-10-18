@@ -1,7 +1,7 @@
 ---
 name: ready-to-ship-audit-agent-skill
 description: "Judge DG10 launch safety with evidence and remedies."
-version: 0.8.0
+version: 0.8.1
 author: shubham-dg10 (https://github.com/shubham-dg10), Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -39,6 +39,12 @@ This skill reports; it does not change. No config edits, commits, tags, pushes, 
 2. `terminal` with `ls` on the project root — if the mount dropped, abort to a local clone.
 3. `read_file` every `.github/workflows/*.yml`; note trigger branches and what actually deploys from this branch.
 4. Record commit SHA + artifact digest. Branch name alone is not identity. For nested repos record inner SHA; libraries with no artifact record no-artifact instead of a digest. Done when: SHA + channel + owner on page.
+
+### 0b. Canonical check (folder is NOT a repo — STOP on mismatch)
+
+5. `terminal` with `git remote -v` — no remote = STOP and ask the user for target repo + branch. Never `gh repo create` without an explicit user order containing the word 'create'.
+6. Compare remote URL + branch against the expected canonical (AGENTS.md Working directory + `gh repo list` + memory). Folder-name match alone is NOT proof — audit slices share names with real apps. Mismatch = STOP, ask user.
+7. `git fetch` + ahead/behind + default branch (`master` vs `main` — verify per repo, never assume). Folder names containing audit/checkout/slice = suspect, require explicit confirmation. Done when: remote URL + SHA recorded in the report. No remote = no READY, ever.
 
 ### 1. Profile + route (self-contained)
 
