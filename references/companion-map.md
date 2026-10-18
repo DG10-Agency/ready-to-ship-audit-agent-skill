@@ -21,3 +21,5 @@ before running anything. OSV batch queries need `--allow-public-query`
 consent (package names leave the box). DAST/load only against
 authorized staging, bounded workload. Never upload a private repo
 or prod artifact to an external scanner without owner approval.
+
+<!-- last_verified: 2026-10-18 — companion tool names vs live skills list; versions pinned by upstream, re-check on use. -->

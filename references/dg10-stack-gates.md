@@ -28,3 +28,5 @@ Denominator: G1–G15 applicable only (N/A excluded, counted separately).
 Pitfall: nested `workflows/` dir = CI-undiscoverable = auto-NOT ASSESSED G11.
 Trap: `npm audit --offline` / cached advisory output is NOT evidence; live networked scan required.
 Neutral: missing middleware.ts is neutral when per-handler enforcement is complete with table; gap only if a handler lacks proof.
+
+<!-- last_verified: 2026-10-18 — gate text vs live CI/validate.yml + scripts/; no vendor doc dependency for this file. -->

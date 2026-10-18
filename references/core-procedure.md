@@ -39,3 +39,5 @@ the artifact about to ship; names and tags alone do not match.
 
 Record run id, branch, SHA, and hash side by side in the report.
 Done when: SHA equals the audited commit and both hashes match.
+
+<!-- last_verified: 2026-10-18 — procedure vs live gh run list + validate.yml; no vendor doc dependency. -->

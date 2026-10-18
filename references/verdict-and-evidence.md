@@ -38,3 +38,5 @@ Redact secrets in all evidence (hash or artifact ID, never values).
 Readiness bands: BLOCKED = any P0 open (ship-killer, must close now); READY WITH WARNINGS = zero P0 + open P1 (ship with owner sign-off, P1 closes within 30 days); READY = zero P0/P1 + open P2 only (P2 hardens within 90 days, tracked in Sustain/blind-spots).
 
 Re-score rule: re-run every release + quarterly; report carries a re-score date; trend (band movement + gap aging) beats absolute score — cite prior band + date when re-scoring.
+
+<!-- last_verified: 2026-10-18 — verdict language vs ReleaseGuard mapping; no vendor doc dependency. -->
