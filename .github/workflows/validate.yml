@@ -14,7 +14,7 @@ jobs:
           python-version: "3.12"
       - name: Assert SKILL.md frontmatter
         run: |
-          python -c "import re,sys; t=open('SKILL.md').read(); m=re.search(r'^---\n(.*?)\n---', t, re.S); assert m, 'missing frontmatter'; f=m.group(1); assert 'name: ready-to-ship-audit-agent-skill' in f, 'skill name mismatch'; assert 'version: 0.8.0' in f, 'version mismatch'; print('frontmatter OK')"
+          python -c "import re,sys,json; t=open('SKILL.md').read(); m=re.search(r'^---\n(.*?)\n---', t, re.S); assert m, 'missing frontmatter'; f=m.group(1); assert 'name: ready-to-ship-audit-agent-skill' in f, 'skill name mismatch'; vm=re.search(r'^version:\s*([0-9]+\.[0-9]+\.[0-9]+)', f, re.M); assert vm, 'version missing'; pj=json.load(open('.claude-plugin/plugin.json')); assert pj.get('version')==vm.group(1), f\"version mismatch SKILL.md {vm.group(1)} vs plugin.json {pj.get('version')}\"; print(f\"frontmatter OK {vm.group(1)}\")"
       - name: Run gate_check
         run: python scripts/gate_check.py --help 2>/dev/null || python scripts/gate_check.py
       - name: Run unit tests
