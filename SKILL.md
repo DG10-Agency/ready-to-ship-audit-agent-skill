@@ -1,7 +1,7 @@
 ---
 name: ready-to-ship-audit-agent-skill
 description: "Judge DG10 launch safety with evidence and remedies."
-version: 0.8.1
+version: 0.9.0
 author: shubham-dg10 (https://github.com/shubham-dg10), Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -52,7 +52,7 @@ Run `references/core-procedure.md` passes 1-3 in order. Map languages, platforms
 
 ### 2. Coverage ledger (checklist, not proof)
 
-Reference the ReleaseGuard catalog (`catalogs/production-checks.json`, path configured per machine — never vendored in). One row per applicable check, init NOT ASSESSED. Map companion evidence to check IDs with provenance. Never convert missing capability to PASS. If the catalog path is unavailable, ledger=G1-G15 only with an explicit omission note. Done when: every applicable check has status + evidence pointer, or NOT ASSESSED + reason.
+Reference the ReleaseGuard catalog (`catalogs/production-checks.json`, path configured per machine — never vendored in). One row per applicable check, init NOT ASSESSED. Map companion evidence to check IDs with provenance. Never convert missing capability to PASS. If the catalog path is unavailable, ledger=G1-G17 only with an explicit omission note. Done when: every applicable check has status + evidence pointer, or NOT ASSESSED + reason.
 
 ### 3. DG10 gap sweep (only what siblings + catalog miss)
 
@@ -60,7 +60,7 @@ Run every gate in `references/dg10-stack-gates.md`; each ends PASS/FAIL/NOT ASSE
 
 ### 4. Emit gaps + fix plan (motive — never skip)
 
-Write `report.md` + `fix-plan.md` from `templates/`. Every FAIL becomes at least one fix task with files, exact commands, and acceptance. Every NOT ASSESSED becomes either a verification task or an explicit blind-spot with consequence. Every Fix names its check id verbatim. Verdict vocabulary, used once: READY / READY WITH WARNINGS / BLOCKED (ReleaseGuard SHIP/FIX/BLOCK in parentheses). Done when: gap table has zero orphan rows and the fix plan is build-ready.
+Write `report.md` + `fix-plan.md` from `templates/`. Every FAIL becomes at least one fix task with files, exact commands, and acceptance. Every NOT ASSESSED becomes either a verification task or an explicit blind-spot with consequence. Every Fix names its check id verbatim. Fix-method proportionality: before choosing a method, check actual consumers of the failing surface (grep callers, live grants, role usage) — the smallest closure that removes the risk wins; revoke/disable/remove-grant beats designing per-table policies when nothing legitimately consumes the surface directly (2026-10-20: whatsapp RLS Fix planned per-table policies; real closure was revoke + RLS-default-deny, zero consumers). Every fix task whose acceptance includes a prod change must also state the post-apply re-probe: re-check baseline health of EVERY critical service (G16 set), not just the changed surface — a co-incident failure hides behind a green spot-check (2026-10-20: RLS apply verified site+feed while auth had been dead 47h). Verdict vocabulary, used once: READY / READY WITH WARNINGS / BLOCKED (ReleaseGuard SHIP/FIX/BLOCK in parentheses). Done when: gap table has zero orphan rows and the fix plan is build-ready.
 
 ### Freshness (every run)
 

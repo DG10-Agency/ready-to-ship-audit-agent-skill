@@ -1,4 +1,4 @@
-# DG10 stack gates (G1–G15)
+# DG10 stack gates (G1–G17)
 
 Only what `production-readiness-audit`, `deployment-readiness`, and the
 ReleaseGuard catalog miss. Tables only — procedure lives in SKILL.md.
@@ -21,12 +21,18 @@ Each gate ends PASS / FAIL / NOT ASSESSED / NOT APPLICABLE (N/A) with file:line 
 | G13 | Desktop packaging (Tauri/Electron) | signing identity + signature verification, updater channel + signed updates, sidecar/externalBin provenance + SBOM, capability least-privilege, IPC input validation | unsigned/no-updater = FAIL for desktop ships; NOT ASSESSED only when no desktop target exists |
 | G14 | Observability/SLO/cost/PII/registry (four sub-checks) | SLO: availability + p95 latency targets recorded + burn-rate alert rule present (`search_files(pattern="burn.?rate\|error_budget\|slo", path="<repo>")`); cost: per-run ceiling recorded + overrun action (`search_files(pattern="max_cost\|cost_cap\|cost_ceiling", path="<repo>")`); PII: redaction at emit, not at store (`search_files(pattern="redact\|pii", path="<emit-paths>")`); registry: prompt + tool versions pinned (`search_files(pattern="prompt_version\|tool_version\|model_version", path="<repo>")`); each sub-check N/A-able by architecture with reason (no LLM surface => cost/PII/registry N/A; no SLO target => NOT ASSESSED, never N/A) | all applicable sub-checks present with file:line or command output; any applicable sub-check missing = FAIL |
 | G15 | Generic web/API hygiene (three sub-checks) | rate-limit: throttle/ratelimit on mutating routes (`search_files(pattern="rate.?limit\|throttl", path="<routes-dir>")`); licenses: dependency allowlist, no GPL in prod bundle (`terminal`: `npx license-checker --production --summary` or `pip-licenses`, grep for GPL/AGPL); a11y/SEO: axe pass on key pages + meta/OG tags present (`terminal`: `npx axe <url>` exit 0; `search_files(pattern="og:title\|description", path="<head>")`); each sub-check one grep/command, N/A-able with reason (no mutating routes / no web surface) | all applicable sub-checks pass with command output or file:line; any applicable miss = FAIL |
+| G16 | Live service liveness + restart survival (added 2026-10-20) | Phase 1: resolve critical services from runtime topology (service layer, §1 core-procedure: app process manager, auth service, API/data service, DB); per-service health probe (`terminal`: `curl -s -o /dev/null -w "%{http_code}" <auth-health-url>` e.g. /auth/v1/health, `<api-root>` e.g. /rest/v1/, `<app-root>`; DB `psql -c 'select 1'` or container exec); state check (`ssh <host>`: `docker ps -a` + `systemctl list-units` / `pm2 jlist`); restart survival (`docker inspect <c> --format '{{.HostConfig.RestartPolicy.Name}}'` — `no` with no supervisor = FAIL); one "site 200" is NOT liveness in a multi-service stack; no remote/SSH => NOT ASSESSED with consequence; hostless/serverless apps assess by platform uptime endpoint + function error logs | every critical service Up + health 2xx AND auto-restart/supervisor configured; any critical service down or reboot-fragile = FAIL |
+| G17 | Startup-path smoke (added 2026-10-20) | mobile: install the release-candidate artifact (EAS preview APK / store build) on device or emulator, cold start, assert app reaches auth-or-home within N seconds — never infinite splash/loading (NOT ASSESSED with consequence "untested boot path" allowed only when no artifact/device available); web: first-load of key routes (curl 200 + no client boot error in runtime logs); covers gate/loading/auth-bootstrap code paths that type checks and exports never exercise (2026-10-19: missing .catch on initial getSession shipped a stuck-logo APK) | cold start reaches auth-or-home every time; any infinite loader/splash = FAIL |
 
 Rules: unknown is NOT ASSESSED, never PASS. Any gate that cannot run
 (no SSH, no staging, no Docker) is NOT ASSESSED with reason + consequence.
-Denominator: G1–G15 applicable only (N/A excluded, counted separately).
+Denominator: G1–G17 applicable only (N/A excluded, counted separately).
+Post-change re-probe rule: after any prod change driven by a Fix, re-run
+the full G16 set (every critical service), not only the changed surface —
+a co-incident failure hides behind a green spot-check (2026-10-20: RLS
+apply verified site+feed while auth had been dead 47h behind it).
 Pitfall: nested `workflows/` dir = CI-undiscoverable = auto-NOT ASSESSED G11.
 Trap: `npm audit --offline` / cached advisory output is NOT evidence; live networked scan required.
 Neutral: missing middleware.ts is neutral when per-handler enforcement is complete with table; gap only if a handler lacks proof.
 
-<!-- last_verified: 2026-10-18 — gate text vs live CI/validate.yml + scripts/; no vendor doc dependency for this file. -->
+<!-- last_verified: 2026-10-20 — G16/G17 added after live DG10 run misses (reboot-killed auth containers + stuck-logo APK); gate text vs live docker/curl probes; no vendor doc dependency for this file. -->

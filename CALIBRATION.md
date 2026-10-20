@@ -21,6 +21,8 @@ Method: `python3 scripts/gate_check.py .` → `GATE PASS (4 files, 0 fails mappe
 | G14 observability/SLO/cost/PII/registry | NOT ASSESSED (split) | SLO: NOT ASSESSED — no availability/p95 target recorded; cost/PII/registry: N/A — no LLM runtime surface in checkout (`scripts/` is stdlib shape-check only); PII policy documented in `SECURITY.md:20` |
 | G15 web/API hygiene | PASS | license sub-check PASS: `LICENSE:1` MIT + zero dependency manifests (no package.json/requirements.txt) so no GPL possible; rate-limit N/A (no mutating routes); a11y N/A (no web surface) |
 
+Note (v0.9.0, 2026-10-20): G16 (live service liveness) + G17 (startup-path smoke) added after this calibration run — both N/A for this static-repo calibration (no live services, no app surface), denominator below stays valid for this run.
+
 Denominator: G1–G15 applicable only → 9 applicable (G1, G2, G3, G4, G6, G7, G9, G14-SLO, G15 — rows with verdicts other than N/A; N/A: G5, G8, G10, G11, G12, G13 = 6). Zero FAILs. NOT ASSESSED items are blind spots with nil consequence here (no executable/networked surface in checkout); none is a P0 ship-killer for a static skill repo.
 
 VERDICT: READY WITH WARNINGS (ReleaseGuard equiv: SHIP WITH ACCEPTED RISK) — evidence: zero FAILs, `gate_check.py` GATE PASS exit 0, 6/6 unit tests OK, green CI (run 39142543538), secret grep zero hits; warnings: G2/G3/G4/G6/G7/G9/G14-SLO unassessed blind spots, tracked as verification tasks on first real-target audit, no owner sign-off needed before use as a skill.

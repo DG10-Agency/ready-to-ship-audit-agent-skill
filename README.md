@@ -43,7 +43,7 @@ no external skills required.                      ▼                           
                                                   │                         spot with consequence
                                                   ▼                       - Sustain section
                                   ┌───────────────────────────────┐         (READY verdicts only)
-                                  │ §3 DG10 SWEEP (G1–G15,        │
+                                  │ §3 DG10 SWEEP (G1–G17,        │
                                   │ references/dg10-stack-gates)  │
                                   │ G1 tsc workspaces · G2        │
                                   │ no-template SQL · G3 auth     │
@@ -59,7 +59,9 @@ no external skills required.                      ▼                           
                                   │ G13 desktop packaging ·       │
                                   │ G14 SLO/cost/PII/registry     │
                                   │ · G15 rate-limit/license/     │
-                                  │ a11y — each ends PASS /       │
+                                  │ a11y · G16 service liveness   │
+                                  │ + restart policy · G17 boot  │
+                                  │ smoke — each ends PASS /      │
                                   │ FAIL / NOT ASSESSED / N/A     │
                                   │ with file:line or cmd out     │
                                   └───────────────┬───────────────┘
@@ -104,7 +106,7 @@ Rules enforced across every phase (see `references/verdict-and-evidence.md`):
 | Changes anything? | No | No | No | No — report only |
 | When to pick it | Broad quality review | Config-focused release check | Parallel deep coverage | Launch go/no-go with remedies |
 
-This skill is self-contained as of v0.8.1 (procedure vendored in `references/core-procedure.md`; the sibling columns above are routing context, not dependencies) and references the ReleaseGuard catalog by path instead of vendoring it. It adds only what breadth scans miss: DG10 stack gates (G1–G15) plus the verdict-to-fix-plan finish.
+This skill is self-contained as of v0.9.0 (procedure vendored in `references/core-procedure.md`; the sibling columns above are routing context, not dependencies) and references the ReleaseGuard catalog by path instead of vendoring it. It adds only what breadth scans miss: DG10 stack gates (G1–G17) plus the verdict-to-fix-plan finish.
 
 ## AEO Q&A
 
@@ -163,7 +165,7 @@ One verdict per run, used once: `READY`, `READY WITH WARNINGS`, or `BLOCKED`. Un
 
 - `SKILL.md` — gate procedure (preflight, routing, ledger, DG10 sweep, emit).
 - `references/core-procedure.md` — self-contained run procedure (no external skills needed).
-- `references/dg10-stack-gates.md` — gates G1–G15 (DG10 stack + desktop + observability + hygiene).
+- `references/dg10-stack-gates.md` — gates G1–G17 (DG10 stack + desktop + observability + hygiene + live liveness + boot smoke).
 - `references/verdict-and-evidence.md` — verdict vocabulary, evidence rules, maturity bands.
 - `references/companion-map.md` — breadth-scan routing and coexistence.
 - `scripts/gate_check.py` — ledger checker; `scripts/test_gate_check.py` — unit tests.
